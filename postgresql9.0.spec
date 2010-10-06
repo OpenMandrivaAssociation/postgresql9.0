@@ -590,7 +590,7 @@ rm -rf %{buildroot}
 
 %files server -f server.lst
 %defattr(-,root,root)
-%config(noreplace) %{_initrddir}/postgresql
+%{_initrddir}/postgresql
 %config(noreplace) %{_sysconfdir}/sysconfig/postgresql
 %doc README.urpmi postgresql.mdv.releasenote
 %{_bindir}/initdb
