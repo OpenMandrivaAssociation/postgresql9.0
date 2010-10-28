@@ -24,7 +24,7 @@
 # %%define beta rc2
 
 # define the mdv release
-%define rel 1
+%define rel 2
 
 %define release %mkrel %{?beta:0.rc.%{beta}.}%{rel}
 
@@ -133,6 +133,7 @@ Provides:	%{bname}-server-virtual = %{current_major_version}
 Conflicts:	%{bname}-server-virtual < %{current_major_version}
 Provides:	%{bname}-server = %{version}-%{release}
 Conflicts:	%{bname}8.3-test < %{version}-%{release}
+Requires:   postgresql-plpgsql = %{version}-%{release}
 
 %description	server
 The postgresql-server package includes the programs needed to create and run a
