@@ -51,12 +51,16 @@ Source13:	postgresql.mdv.releasenote
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
 Conflicts:	postgresql-clients < %{version}-%{release}
-BuildRequires:	X11-devel bison flex gettext termcap-devel ncurses-devel openssl-devel
-BuildRequires:	pam-devel perl-devel python-devel readline-devel >= 4.3 tk zlib-devel tcl
-BuildRequires:	tcl tcl-devel
-BuildRequires:  libxml2-devel
-BuildRequires:  libxslt-devel
-BuildRequires:	edit-devel
+BuildRequires:	bison flex
+BuildRequires:	openssl-devel
+BuildRequires:	pam-devel
+BuildRequires:	perl-devel
+BuildRequires:	python-devel
+BuildRequires:	readline-devel
+BuildRequires:	tcl-devel
+BuildRequires:	libxml2-devel
+BuildRequires:	libxslt-devel
+BuildRequires:	zlib-devel
 %if %withuuid
 BuildRequires:  ossp_uuid-devel
 %endif
