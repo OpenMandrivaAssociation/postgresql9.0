@@ -24,7 +24,7 @@
 # %%define beta rc2
 
 # define the mdv release
-%define rel 1
+%define rel 2
 
 %define release %mkrel %{?beta:0.rc.%{beta}.}%{rel}
 
@@ -50,7 +50,6 @@ Source11:	postgresql.init
 Source13:	postgresql.mdv.releasenote
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
-Conflicts:	postgresql-clients < %{version}-%{release}
 BuildRequires:	bison flex
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
@@ -69,7 +68,6 @@ BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc
 Provides:	%{bname}-virtual = %{current_major_version}
 Conflicts:	%{bname}-virtual < %{current_major_version}
 Provides:	%{bname} = %{version}-%{release}
-Conflicts:	%{bname} < %{version}-%{release}
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -92,7 +90,6 @@ installing the postgresql-server package.
 %package -n	%{libname}
 Summary:	The shared libraries required for any PostgreSQL clients
 Group:		System/Libraries
-Conflicts:	postgresql-libs < %{version}-%{release}
 Provides:	postgresql-libs = %{version}-%{release}
 Provides:	libpq = %{version}-%{release}
 Provides:	%{libname}-virtual = %{current_major_version}
@@ -189,11 +186,9 @@ Conflicts:	libpq3-devel = 8.0.2
 Provides:	libpq-devel = %{version}-%{release}
 %endif
 Provides:	%{_lib}pq-devel = %{version}
-Conflicts:	%{_lib}pq-devel < %{version}
 Requires:	%{libecpg} = %{version}-%{release}
 Provides:	libecpg-devel = %{version}-%{release} 
 Provides:	%{_lib}ecpg-devel = %{version}-%{release}
-Conflicts:	%{_lib}ecpg-devel < %{version}-%{release}
 Conflicts:	%mklibname -d ecpg 5
 Conflicts:	%mklibname -d pq 5
 Conflicts:	%mklibname -d pq8.3
@@ -201,7 +196,6 @@ Conflicts:	%mklibname -d ecpg8.3
 Conflicts:	%mklibname -d pq8.4
 Conflicts:	%mklibname -d ecpg8.4
 Provides:	%{bname}-devel = %{version}-%{release}
-Conflicts:	%{bname}-devel < %{version}-%{release}
 
 %description	devel
 The postgresql-devel package contains the header files and libraries needed to
@@ -221,7 +215,6 @@ Requires:	%{name}-pltcl = %{version}-%{release}
 Requires:	%{name}-plpgsql = %{version}-%{release} 
 Provides:	%{bname}-pl-virtual = %{current_major_version}
 Conflicts:	%{bname}-pl-virtual < %{current_major_version}
-Conflicts:	%{bname}-pl < %{version}-%{release}
 Provides:	%{bname}-pl = %{version}-%{release}
 
 %description	pl
@@ -233,11 +226,9 @@ languages for the backend. PL/Pgsql is part of the core server package.
 Summary:	The PL/Python procedural language for PostgreSQL
 Group:		Databases
 Requires:	postgresql%{current_major_version}-server = %{version}
-Conflicts:	postgresql-pl < %version-%release
 Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
 Provides:	%{bname}-plpython-virtual = %{current_major_version}
 Conflicts:	%{bname}-plpython-virtual < %{current_major_version}
-Conflicts:	%{bname}-plpython < %{version}-%{release}
 Provides:	%{bname}-plpython = %{version}-%{release}
 
 %description	plpython
@@ -250,11 +241,9 @@ Summary:	The PL/Perl procedural language for PostgreSQL
 Group:		Databases
 Requires:	postgresql%{current_major_version}-server = %{version}
 Requires:	perl-base = %{perl_epoch}:%{perl_version}
-Conflicts:	postgresql-pl < %version-%release
 Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
 Provides:	%{bname}-plperl-virtual = %{current_major_version}
 Conflicts:	%{bname}-plperl-virtual < %{current_major_version}
-Conflicts:	%{bname}-plperl < %{version}-%{release}
 Provides:	%{bname}-plperl = %{version}-%{release}
 
 %description	plperl
@@ -266,11 +255,9 @@ backend. PL/Perl is part of the core server package.
 Summary:	The PL/Tcl procedural language for PostgreSQL
 Group:		Databases
 Requires:	postgresql%{current_major_version}-server = %{version}
-Conflicts:	postgresql-pl < %version-%release
 Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
 Provides:	%{bname}-pltcl-virtual = %{current_major_version}
 Conflicts:	%{bname}-pltcl-virtual < %{current_major_version}
-Conflicts:	%{bname}-pltcl < %{version}-%{release}
 Provides:	%{bname}-pltcl = %{version}-%{release}
 
 %description	pltcl
@@ -282,11 +269,9 @@ backend. PL/Tcl is part of the core server package.
 Summary:	The PL/PgSQL procedural language for PostgreSQL
 Group:		Databases
 Requires:	postgresql%{current_major_version}-server = %{version}
-Conflicts:	postgresql-pl < %version-%release
 Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
 Provides:	%{bname}-plpgsql-virtual = %{current_major_version}
 Conflicts:	%{bname}-plpgsql-virtual < %{current_major_version}
-Conflicts:	%{bname}-plpgsql < %{version}-%{release}
 Provides:	%{bname}-plpgsql = %{version}-%{release}
 
 %description	plpgsql
