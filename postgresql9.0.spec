@@ -24,7 +24,7 @@
 # %%define beta rc2
 
 # define the mdv release
-%define rel 2
+%define rel 3
 
 %define release %mkrel %{?beta:0.rc.%{beta}.}%{rel}
 
@@ -67,6 +67,7 @@ BuildRequires:  ossp_uuid-devel
 BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc
 Provides:	%{bname}-virtual = %{current_major_version}
 Conflicts:	%{bname}-virtual < %{current_major_version}
+Requires:	%{libname} = %{version}
 Provides:	%{bname} = %{version}-%{release}
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -92,8 +93,8 @@ Summary:	The shared libraries required for any PostgreSQL clients
 Group:		System/Libraries
 Provides:	postgresql-libs = %{version}-%{release}
 Provides:	libpq = %{version}-%{release}
-Provides:	%{libname}-virtual = %{current_major_version}
-Conflicts:	%{libname}-virtual < %{current_major_version}
+Provides:	%{mklibname pq}-virtual = %{current_major_version}
+Conflicts:	postgresql-libs < %{current_major_version}
 # Avoid conflicts with lib having bad major
 Conflicts:	libpq3 = 8.0.2
 
@@ -107,8 +108,8 @@ Summary:	Shared library libecpg for PostgreSQL
 Group:		System/Libraries
 Requires:	postgresql%{current_major_version} = %{version}-%{release}
 Provides:	libecpg = %{version}-%{release}
-Provides:	%{libecpg}-virtual = %{current_major_version}
-Conflicts:	%{libecpg}-virtual < %{current_major_version}
+Provides:	%{mklibname ecpg}-virtual = %{current_major_version}
+Conflicts:	libecpg < %{current_major_version}
 
 %description -n	%{libecpg}
 Libecpg is used by programs built with ecpg (Embedded PostgreSQL for C) Use
