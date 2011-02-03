@@ -64,7 +64,7 @@ BuildRequires:	zlib-devel
 BuildRequires:  ossp_uuid-devel
 %endif
 # Need to build doc
-BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc
+BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc docbook-style-xsl
 Provides:	%{bname}-virtual = %{current_major_version}
 Conflicts:	%{bname}-virtual < %{current_major_version}
 Requires:	%{libname} = %{version}
@@ -288,7 +288,7 @@ the backend. PL/PgSQL is part of the core server package.
 
 %serverbuild
 
-%configure \
+%configure2_5x \
         --disable-rpath \
         --enable-hba \
 	--enable-locale \
