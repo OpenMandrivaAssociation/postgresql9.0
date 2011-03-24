@@ -61,7 +61,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	zlib-devel
 %if %withuuid
-BuildRequires:  ossp_uuid-devel
+BuildRequires:  ossp_uuid-devel >= 1.6.2-5
 %endif
 # Need to build doc
 BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc docbook-style-xsl
