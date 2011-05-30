@@ -48,6 +48,7 @@ Source5:	ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}%{
 Source10:	postgres.profile
 Source11:	postgresql.init
 Source13:	postgresql.mdv.releasenote
+Patch0:		postgresql-9.0.4_ossp-uuid-dir.patch
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
 BuildRequires:	bison flex
@@ -64,7 +65,8 @@ BuildRequires:	zlib-devel
 BuildRequires:  ossp-uuid-devel >= 1.6.2-5
 %endif
 # Need to build doc
-BuildRequires:  docbook-dtd42-sgml openjade docbook-utils xsltproc docbook-style-xsl
+BuildRequires:  docbook-dtd42-sgml docbook-dtd44-xml
+BuildRequires:	openjade docbook-utils xsltproc docbook-style-xsl
 Provides:	%{bname}-virtual = %{current_major_version}
 Conflicts:	%{bname}-virtual < %{current_major_version}
 Requires:	%{libname} = %{version}
@@ -283,6 +285,7 @@ the backend. PL/PgSQL is part of the core server package.
 %prep
 
 %setup -q -n %{bname}-%{version}%{?beta}
+%patch0 -p1 -b .ossp-uuid_dir~
 
 %build
 
