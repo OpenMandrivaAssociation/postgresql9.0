@@ -69,7 +69,7 @@ BuildRequires:  docbook-dtd42-sgml docbook-dtd44-xml
 BuildRequires:	openjade docbook-utils xsltproc docbook-style-xsl
 Provides:	%{bname}-virtual = %{current_major_version}
 Conflicts:	%{bname}-virtual < %{current_major_version}
-Requires:	%{libname} = %{version}
+Requires:	%{libname} >= %{version}
 Provides:	%{bname} = %{version}-%{release}
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -108,7 +108,7 @@ TCP/IP.
 %package -n	%{libecpg}
 Summary:	Shared library libecpg for PostgreSQL
 Group:		System/Libraries
-Requires:	postgresql%{current_major_version} = %{version}-%{release}
+Requires:	postgresql%{current_major_version} >= %{version}-%{release}
 Provides:	libecpg = %{version}-%{release}
 Provides:	%{mklibname ecpg}-virtual = %{current_major_version}
 Conflicts:	libecpg < %{current_major_version}
@@ -137,7 +137,7 @@ Provides:	%{bname}-server-virtual = %{current_major_version}
 Conflicts:	%{bname}-server-virtual < %{current_major_version}
 Provides:	%{bname}-server = %{version}-%{release}
 Conflicts:	%{bname}8.3-test < %{version}-%{release}
-Requires:   postgresql-plpgsql = %{version}-%{release}
+Requires:   postgresql-plpgsql >= %{version}-%{release}
 
 %description	server
 The postgresql-server package includes the programs needed to create and run a
@@ -166,7 +166,7 @@ project, or if you want to generate printed documentation.
 %package	contrib
 Summary:	Contributed binaries distributed with PostgreSQL
 Group:		Databases
-Requires:	postgresql%{current_major_version}-server = %{version}-%{release}
+Requires:	postgresql%{current_major_version}-server >= %{version}-%{release}
 Provides:	%{bname}-contrib-virtual = %{current_major_version}
 Conflicts:	%{bname}-contrib-virtual < %{current_major_version}
 
@@ -177,10 +177,10 @@ PostgreSQL tarball.  Selected contrib modules are prebuilt.
 %package	devel
 Summary:	PostgreSQL development header files and libraries
 Group:		Development/Databases
-Requires:	postgresql%{current_major_version} = %{version}-%{release}
+Requires:	postgresql%{current_major_version} >= %{version}-%{release}
 Provides:	%{bname}-devel-virtual = %{current_major_version}
 Conflicts:	%{bname}-devel-virtual < %{current_major_version}
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} >= %{version}-%{release}
 Provides:	postgresql-libs-devel = %{version}-%{release}
 Provides:	pq-devel = %{version}-%{release}
 # Avoid conflicts with lib having bad major
@@ -189,7 +189,7 @@ Conflicts:	libpq3-devel = 8.0.2
 Provides:	libpq-devel = %{version}-%{release}
 %endif
 Provides:	%{_lib}pq-devel = %{version}
-Requires:	%{libecpg} = %{version}-%{release}
+Requires:	%{libecpg} >= %{version}-%{release}
 Provides:	libecpg-devel = %{version}-%{release} 
 Provides:	%{_lib}ecpg-devel = %{version}-%{release}
 Conflicts:	%mklibname -d ecpg 5
@@ -212,10 +212,10 @@ need to install this package.
 Summary:	Procedurals languages for PostgreSQL
 Group:		Databases
 Conflicts:	libpgsql2
-Requires:	%{name}-plpython = %{version}-%{release} 
-Requires:	%{name}-plperl = %{version}-%{release} 
-Requires:	%{name}-pltcl = %{version}-%{release} 
-Requires:	%{name}-plpgsql = %{version}-%{release} 
+Requires:	%{name}-plpython >= %{version}-%{release} 
+Requires:	%{name}-plperl >= %{version}-%{release} 
+Requires:	%{name}-pltcl >= %{version}-%{release} 
+Requires:	%{name}-plpgsql >= %{version}-%{release} 
 Provides:	%{bname}-pl-virtual = %{current_major_version}
 Conflicts:	%{bname}-pl-virtual < %{current_major_version}
 Provides:	%{bname}-pl = %{version}-%{release}
@@ -228,8 +228,8 @@ languages for the backend. PL/Pgsql is part of the core server package.
 %package	plpython
 Summary:	The PL/Python procedural language for PostgreSQL
 Group:		Databases
-Requires:	postgresql%{current_major_version}-server = %{version}
-Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
+Requires:	postgresql%{current_major_version}-server >= %{version}
+Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} >= %{current_major_version}
 Provides:	%{bname}-plpython-virtual = %{current_major_version}
 Conflicts:	%{bname}-plpython-virtual < %{current_major_version}
 Provides:	%{bname}-plpython = %{version}-%{release}
@@ -242,9 +242,9 @@ the backend. PL/Python is part of the core server package.
 %package	plperl
 Summary:	The PL/Perl procedural language for PostgreSQL
 Group:		Databases
-Requires:	postgresql%{current_major_version}-server = %{version}
-Requires:	perl-base = %{perl_epoch}:%{perl_version}
-Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
+Requires:	postgresql%{current_major_version}-server >= %{version}
+Requires:	perl-base >= %{perl_epoch}:%{perl_version}
+Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} >= %{current_major_version}
 Provides:	%{bname}-plperl-virtual = %{current_major_version}
 Conflicts:	%{bname}-plperl-virtual < %{current_major_version}
 Provides:	%{bname}-plperl = %{version}-%{release}
@@ -257,8 +257,8 @@ backend. PL/Perl is part of the core server package.
 %package	pltcl
 Summary:	The PL/Tcl procedural language for PostgreSQL
 Group:		Databases
-Requires:	postgresql%{current_major_version}-server = %{version}
-Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
+Requires:	postgresql%{current_major_version}-server >= %{version}
+Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} >= %{current_major_version}
 Provides:	%{bname}-pltcl-virtual = %{current_major_version}
 Conflicts:	%{bname}-pltcl-virtual < %{current_major_version}
 Provides:	%{bname}-pltcl = %{version}-%{release}
@@ -271,8 +271,8 @@ backend. PL/Tcl is part of the core server package.
 %package	plpgsql
 Summary:	The PL/PgSQL procedural language for PostgreSQL
 Group:		Databases
-Requires:	postgresql%{current_major_version}-server = %{version}
-Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
+Requires:	postgresql%{current_major_version}-server >= %{version}
+Requires:	%{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} >= %{current_major_version}
 Provides:	%{bname}-plpgsql-virtual = %{current_major_version}
 Conflicts:	%{bname}-plpgsql-virtual < %{current_major_version}
 Provides:	%{bname}-plpgsql = %{version}-%{release}
@@ -293,22 +293,14 @@ the backend. PL/PgSQL is part of the core server package.
 
 %configure2_5x \
         --disable-rpath \
-        --enable-hba \
-	--enable-locale \
-	--enable-multibyte \
-	--enable-syslog\
-	--with-CXX \
-	--enable-odbc \
 	--with-perl \
 	--with-python \
         --with-tcl --with-tclconfig=%{_libdir} \
-        --without-tk \
         --with-openssl \
         --with-pam \
         --with-libxml \
         --with-libxslt \
         --libdir=%{_libdir} \
-        --with-docdir=%{_docdir} \
         --mandir=%{_mandir} \
         --prefix=%_prefix \
         --sysconfdir=%{_sysconfdir}/pgsql \
@@ -319,6 +311,14 @@ the backend. PL/PgSQL is part of the core server package.
 
 # $(rpathdir) come from Makefile
 perl -pi -e 's|^all:|LINK.shared=\$(COMPILER) -shared -Wl,-rpath,\$(rpathdir),-soname,\$(soname)\nall:|' src/pl/plperl/GNUmakefile
+
+# nuke -Wl,--no-undefined
+perl -pi -e "s|-Wl,--no-undefined||g" src/Makefile.global
+
+%if %withuuid
+# bork...
+echo "#define HAVE_OSSP_UUID_H 1" >> src/include/pg_config.h
+%endif
 
 %make world
 
@@ -410,7 +410,7 @@ cat > %buildroot/%_sys_macros_dir/%{name}.macros <<EOF
 %%postgresql_version %{version}
 %%postgresql_major   %{current_major_version}
 %%postgresql_minor   %{current_minor_version}
-%%pgmodules_req Requires: %{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} = %{current_major_version}
+%%pgmodules_req Requires: %{?arch_tagged:%arch_tagged %{bname}-server-ABI}%{?!arch_tagged:%{bname}-server-ABI} >= %{current_major_version}
 EOF
 
 cat %{SOURCE13} > postgresql.mdv.releasenote
@@ -465,10 +465,6 @@ echo ""
 
 exit 1
 
-%if %mdkversion < 200900
-%post server -p /sbin/ldconfig
-%endif
-
 %posttrans server
 
 %_post_service %{bname}
@@ -477,24 +473,7 @@ exit 1
 %_preun_service %{bname}
 
 %postun server
-%if %mdkversion < 200900
-/sbin/ldconfig
-%endif
 %_postun_userdel postgres
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n %{libecpg} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libecpg} -p /sbin/ldconfig
-%endif
 
 %clean
 rm -rf %{buildroot}
@@ -698,4 +677,3 @@ rm -rf %{buildroot}
 %files plpgsql
 %defattr(-,root,root) 
 %{_libdir}/postgresql/plpgsql.so
-
