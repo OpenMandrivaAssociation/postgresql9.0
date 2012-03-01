@@ -381,19 +381,19 @@ mv %{buildroot}%{_docdir}/%{bname}/html %{buildroot}%{_docdir}/%{name}-docs-%{ve
 
 echo -n '' > main.lst
 for i in \
-    pg_ctl initdb pg_config psql pg_dump pgscripts libpq libecpg \
+    pg_ctl initdb pg_config psql pg_dump pgscripts \
     ecpg libpq%{major} ecpglib%{major_ecpg}; do
-    %find_lang $i-%{current_major_version}
-    cat $i-%{current_major_version}.lang >> main.lst
-    %find_lang $i
-    cat $i.lang >> main.lst
+    %find_lang ${i}-%{current_major_version}
+    cat ${i}-%{current_major_version}.lang >> main.lst
+#    %find_lang ${i}
+#    cat ${i}.lang >> main.lst
 done
 echo -n '' > server.lst
 for i in postgres pg_resetxlog pg_controldata plpgsql plpython plperl pltcl; do
-    %find_lang $i
-    cat $i.lang >> server.lst
-    %find_lang $i-%{current_major_version}
-    cat $i-%{current_major_version}.lang >> server.lst
+#    %find_lang ${i}
+#    cat ${i}.lang >> server.lst
+    %find_lang ${i}-%{current_major_version}
+    cat ${i}-%{current_major_version}.lang >> server.lst
 done
 
 # pg_ctl.lang initdb.lang pg_config.lang psql.lang pg_dump.lang pgscripts.lang \
@@ -481,7 +481,7 @@ exit 1
 %clean
 rm -rf %{buildroot}
 
-%files -f main.lst 
+%files -f main.lst
 %defattr(-,root,root)
 %doc doc/KNOWN_BUGS doc/MISSING_FEATURES doc/README* 
 %doc COPYRIGHT README HISTORY doc/bug.template
@@ -514,7 +514,7 @@ rm -rf %{buildroot}
 %{_mandir}/man7/*
 %_sys_macros_dir/%{name}.macros
 
-%files -n %{libname} 
+%files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/libpq.so.%{major}*
 
