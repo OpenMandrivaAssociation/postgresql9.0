@@ -651,9 +651,9 @@ rm -rf %{buildroot}
 %{_bindir}/pg_config
 %{_mandir}/man1/pg_config.1*
 #From %files -n %{libnamedevel}
-%{_libdir}/libpq.so
+#%{_libdir}/libpq.so
 #From %files -n %{libecpgdevel}
-%{_libdir}/libecpg.so
+#%{_libdir}/libecpg.so
 %{_mandir}/man3/SPI_*.3*
 %{_mandir}/man3/dblink*.3*
 
