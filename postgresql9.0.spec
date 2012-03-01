@@ -288,8 +288,11 @@ the backend. PL/PgSQL is part of the core server package.
 %patch0 -p1 -b .ossp-uuid_dir~
 
 %build
-
 %serverbuild
+
+# it does not work with -fPIE and someone added that to the serverbuild macro...
+CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
+CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
 
 %configure2_5x \
         --disable-rpath \
