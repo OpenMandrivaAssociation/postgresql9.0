@@ -18,7 +18,7 @@
 
 %define bname postgresql
 %define current_major_version 9.0
-%define current_minor_version 7
+%define current_minor_version 8
 
 # Define if it's a beta
 # %%define beta rc2
