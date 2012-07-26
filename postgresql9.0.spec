@@ -49,6 +49,7 @@ Source10:	postgres.profile
 Source11:	postgresql.init
 Source13:	postgresql.mdv.releasenote
 Patch0:		postgresql-9.0.4_ossp-uuid-dir.patch
+Patch1:		postgresql-9.0.8-soname_fix.diff
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
 BuildRequires:	bison flex
@@ -286,6 +287,7 @@ the backend. PL/PgSQL is part of the core server package.
 
 %setup -q -n %{bname}-%{version}%{?beta}
 %patch0 -p1 -b .ossp-uuid_dir~
+%patch1 -p1 -b .soname_fix
 
 %build
 %serverbuild
@@ -313,7 +315,7 @@ CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
 %endif
 
 # $(rpathdir) come from Makefile
-perl -pi -e 's|^all:|LINK.shared=\$(COMPILER) -shared -Wl,-rpath,\$(rpathdir),-soname,\$(soname)\nall:|' src/pl/plperl/GNUmakefile
+#perl -pi -e 's|^all:|LINK.shared=\$(COMPILER) -shared -Wl,-rpath,\$(rpathdir),-soname,\$(soname)\nall:|' src/pl/plperl/GNUmakefile
 
 # nuke -Wl,--no-undefined
 perl -pi -e "s|-Wl,--no-undefined||g" src/Makefile.global
