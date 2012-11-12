@@ -1,0 +1,22 @@
+diff -Naur postgresql-9.0.8/src/pl/plperl/GNUmakefile postgresql-9.0.8.oden/src/pl/plperl/GNUmakefile
+--- postgresql-9.0.8/src/pl/plperl/GNUmakefile	2012-06-01 01:09:35.000000000 +0200
++++ postgresql-9.0.8.oden/src/pl/plperl/GNUmakefile	2012-07-26 11:22:13.000000000 +0200
+@@ -39,6 +39,7 @@
+ PERLCHUNKS = plc_perlboot.pl plc_trusted.pl
+ 
+ SHLIB_LINK = $(perl_embed_ldflags)
++SHLIB_LINK += $(rpath) -Wl,-soname=plperl.so
+ 
+ REGRESS_OPTS = --dbname=$(PL_TESTDB) --load-language=plperl  --load-language=plperlu
+ REGRESS = plperl plperl_trigger plperl_shared plperl_elog plperl_util plperl_init plperlu
+diff -Naur postgresql-9.0.8/src/pl/plpgsql/src/Makefile postgresql-9.0.8.oden/src/pl/plpgsql/src/Makefile
+--- postgresql-9.0.8/src/pl/plpgsql/src/Makefile	2012-06-01 01:09:35.000000000 +0200
++++ postgresql-9.0.8.oden/src/pl/plpgsql/src/Makefile	2012-07-26 11:23:43.000000000 +0200
+@@ -16,6 +16,7 @@
+ override CPPFLAGS := -I. -I$(srcdir) $(CPPFLAGS)
+ SHLIB_LINK = $(filter -lintl, $(LIBS))
+ rpath =
++SHLIB_LINK += -Wl,-soname=plpgsql.so
+ 
+ OBJS = pl_gram.o pl_handler.o pl_comp.o pl_exec.o pl_funcs.o pl_scanner.o
+ 
