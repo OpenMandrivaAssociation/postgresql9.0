@@ -1,6 +1,2 @@
 sources:
-  "postgres.profile:"	5ce9c6fe5586a6b453f96e8eb61c48f51e579965
-  "postgresql-9.0.8.tar.bz2:"	240d2d45bc87d8cdad8e2b74cf378f5668b604fe
-  "postgresql-9.0.8.tar.bz2.md5:"	9da6e77f23491ee2b708e258373a189af339508c
-  "postgresql.init:"	e79e4f541ef1a9094dfde43ab4d85e45f5174fb7
-  "postgresql.mdv.releasenote:"	fb611597a84dd1152c8e13d8be7d6ea47ee1cb23
+  "postgresql-9.0.9.tar.bz2": ff9907d0941578f15a6eda52a60982d9ecafbcf1

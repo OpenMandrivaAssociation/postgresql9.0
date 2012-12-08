@@ -18,14 +18,15 @@
 
 %define bname postgresql
 %define current_major_version 9.0
-%define current_minor_version 8
+%define current_minor_version 9
 
 # Define if it's a beta
 # %%define beta rc2
 
 # define the mdv release
-%define rel 2
+%define rel 0
 
+%define subrel 1
 %define release %mkrel %{?beta:0.rc.%{beta}.}%{rel}
 
 %define libname %mklibname pq%{current_major_version} _%{major}
@@ -49,7 +50,7 @@ Source10:	postgres.profile
 Source11:	postgresql.init
 Source13:	postgresql.mdv.releasenote
 Patch0:		postgresql-9.0.4_ossp-uuid-dir.patch
-Patch1:		postgresql-9.0.8-soname_fix.diff
+Patch1:		 postgresql-9.0.8-soname_fix.diff
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
 BuildRequires:	bison flex
@@ -290,8 +291,8 @@ the backend. PL/PgSQL is part of the core server package.
 %patch1 -p1 -b .soname_fix
 
 %build
-%serverbuild
 
+%serverbuild
 # it does not work with -fPIE and someone added that to the serverbuild macro...
 CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
 CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
@@ -313,9 +314,6 @@ CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
 %if %withuuid
         --with-ossp-uuid
 %endif
-
-# $(rpathdir) come from Makefile
-#perl -pi -e 's|^all:|LINK.shared=\$(COMPILER) -shared -Wl,-rpath,\$(rpathdir),-soname,\$(soname)\nall:|' src/pl/plperl/GNUmakefile
 
 # nuke -Wl,--no-undefined
 perl -pi -e "s|-Wl,--no-undefined||g" src/Makefile.global
@@ -385,17 +383,17 @@ echo -n '' > main.lst
 for i in \
     pg_ctl initdb pg_config psql pg_dump pgscripts \
     ecpg libpq%{major} ecpglib%{major_ecpg}; do
-    %find_lang ${i}-%{current_major_version}
-    cat ${i}-%{current_major_version}.lang >> main.lst
-#    %find_lang ${i}
-#    cat ${i}.lang >> main.lst
+    %find_lang $i-%{current_major_version}
+    cat $i-%{current_major_version}.lang >> main.lst
+#    %find_lang $i
+#    cat $i.lang >> main.lst
 done
 echo -n '' > server.lst
 for i in postgres pg_resetxlog pg_controldata plpgsql plpython plperl pltcl; do
-#    %find_lang ${i}
-#    cat ${i}.lang >> server.lst
-    %find_lang ${i}-%{current_major_version}
-    cat ${i}-%{current_major_version}.lang >> server.lst
+#    %find_lang $i
+#    cat $i.lang >> server.lst
+    %find_lang $i-%{current_major_version}
+    cat $i-%{current_major_version}.lang >> server.lst
 done
 
 # pg_ctl.lang initdb.lang pg_config.lang psql.lang pg_dump.lang pgscripts.lang \
@@ -682,3 +680,274 @@ rm -rf %{buildroot}
 %files plpgsql
 %defattr(-,root,root) 
 %{_libdir}/postgresql/plpgsql.so
+
+
+%changelog
+* Tue Aug 21 2012 Danila Leontiev <danila.leontiev@rosalab.ru>  9.0.9-0.1
+- 9.0.9: nnew upstream maintenance version, fixes CVE-2012-3488, CVE-2012-3489
+
+* Wed Jun 20 2012 Danila Leontiev <danila.leontiev@rosalab.ru>  9.0.8-0.1
+- 9.0.8: new upstream maintenance version, fixes CVE-2012-2143, CVE-2012-2655
+
+* Wed Feb 29 2012 Oden Eriksson <oeriksson@mandriva.com> 9.0.7-0.1
+- 9.0.7: new upstream maintenance version, fixes CVE-2012-0866,0867,0868
+
+* Mon Oct 24 2011 Oden Eriksson <oeriksson@mandriva.com> 9.0.5-0.1
+- 9.0.5: new upstream maintenance version, fixes CVE-2011-2483
+
+* Thu Oct 06 2011 Oden Eriksson <oeriksson@mandriva.com> 9.0.5-1mdv2012.0
++ Revision: 703338
+- fix build
+- 9.0.5
+
+  + Matthew Dawkins <mattydaw@mandriva.org>
+    - added p0 for ossp-uuid header dir
+    - added missing BR docbook-dtd44-xml
+    - fixed BR for ossp-uuid
+
+* Sat Apr 23 2011 Funda Wang <fwang@mandriva.org> 9.0.4-1
++ Revision: 656791
+- New verison 9.0.4
+
+* Thu Mar 24 2011 Per Øyvind Karlsen <peroyvind@mandriva.org> 9.0.3-3
++ Revision: 648409
+- add buildrequires on recent enough ossp_uuid-devel
+- rebuild against renamed libossp-uuid library
+
+* Sat Feb 26 2011 Götz Waschk <waschk@mandriva.org> 9.0.3-2
++ Revision: 639832
+- rebuild for new perl
+
+* Thu Feb 03 2011 Funda Wang <fwang@mandriva.org> 9.0.3-1
++ Revision: 635681
+- BR docbook-style-xsl for manpage generation
+- new version 9.0.3
+
+  + Per Øyvind Karlsen <peroyvind@mandriva.org>
+    - fix conflicts on older versions
+
+* Sat Jan 22 2011 Per Øyvind Karlsen <peroyvind@mandriva.org> 9.0.2-2
++ Revision: 632145
+- drop overeager, redundant conflicts (#57689)
+
+  + Funda Wang <fwang@mandriva.org>
+    - tighten BR
+
+* Thu Dec 30 2010 Oden Eriksson <oeriksson@mandriva.com> 9.0.2-1mdv2011.0
++ Revision: 626580
+- 9.0.2
+
+* Mon Nov 29 2010 Oden Eriksson <oeriksson@mandriva.com> 9.0.1-4mdv2011.0
++ Revision: 603112
+- fix #61220 (MCC (drakconf) does not show correct status for postgresql, whether invoked by init.d or manually)
+
+* Fri Oct 29 2010 Oden Eriksson <oeriksson@mandriva.com> 9.0.1-3mdv2011.0
++ Revision: 589943
+- rebuild
+
+* Thu Oct 28 2010 Olivier Thauvin <nanardon@mandriva.org> 9.0.1-2mdv2011.0
++ Revision: 589654
+- plpgsql is now need by server
+
+  + Per Øyvind Karlsen <peroyvind@mandriva.org>
+    - don't tag init script as a config file
+
+* Tue Oct 05 2010 Oden Eriksson <oeriksson@mandriva.com> 9.0.1-1mdv2011.0
++ Revision: 583092
+- import postgresql9.0
+
+
+* Tue Oct 05 2010 Oden Eriksson <oeriksson@mandriva.com> 9.0.1-1mdv2010.1
+- first cut at 9.x
+
+* Mon Sep 20 2010 Per Øyvind Karlsen <peroyvind@mandriva.org> 8.4.4-8mdv2011.0
++ Revision: 580305
+- fix the immediate stop mode in init script
+- make sure to use log file when restarting
+
+* Thu Sep 16 2010 Per Øyvind Karlsen <peroyvind@mandriva.org> 8.4.4-7mdv2011.0
++ Revision: 579081
+- drop redundant(/broken, #55810) conflicts on future releases (real fix #57689)
+- rewrite init script:
+  	o use postgresql's own pid file
+  	o fix locale usage so that database initialized uses sysconfig's LC_ALL
+  	o add proper (LSB conforming) return codes
+  	o allow starting even without network, as unix sockets can be used
+  	o allow for specifying stop mode
+  	o add condstop & condrestart
+  	o add support for specifying additional pg_ctl start/restart arguments
+  	o ditch attempts at cross-distro logics, mdv specific functioniality
+  	  were already in use anyways..
+  	o cosmetics!
+- do not remove any existing postgresql unix sockets before starting, it's not
+  necessary and will also remove sockets for any other running postgresql servers
+
+* Thu Sep 09 2010 Olivier Thauvin <nanardon@mandriva.org> 8.4.4-6mdv2011.0
++ Revision: 576981
+- rebuild for perl
+
+* Mon Aug 23 2010 Olivier Thauvin <nanardon@mandriva.org> 8.4.4-5mdv2011.0
++ Revision: 572439
+- make --with-ossp-uuid enable only on recent mdv to allow backport on mdv w/o ossp_uuid-devel
+
+* Thu Jul 29 2010 Olivier Thauvin <nanardon@mandriva.org> 8.4.4-4mdv2011.0
++ Revision: 562900
+- rebuild for new perl
+
+* Thu Jul 22 2010 Olivier Thauvin <nanardon@mandriva.org> 8.4.4-3mdv2011.0
++ Revision: 556751
+- rebuild for new perl
+
+* Sat Jul 10 2010 Luis Daniel Lucio Quiroz <dlucio@mandriva.org> 8.4.4-2mdv2011.0
++ Revision: 550319
+- UUID function support
+
+* Thu May 20 2010 Oden Eriksson <oeriksson@mandriva.com> 8.4.4-1mdv2010.1
++ Revision: 545480
+- 8.4.4
+
+  + Christophe Fergeau <cfergeau@mandriva.com>
+    - fix typos in README.urpmi
+
+* Mon Apr 05 2010 Funda Wang <fwang@mandriva.org> 8.4.3-2mdv2010.1
++ Revision: 531723
+- rebuild for new openssl
+
+* Tue Mar 16 2010 Funda Wang <fwang@mandriva.org> 8.4.3-1mdv2010.1
++ Revision: 520671
+- New version 8.4.3
+
+* Fri Feb 26 2010 Oden Eriksson <oeriksson@mandriva.com> 8.4.2-4mdv2010.1
++ Revision: 511620
+- rebuilt against openssl-0.9.8m
+
+* Wed Feb 17 2010 Olivier Thauvin <nanardon@mandriva.org> 8.4.2-3mdv2010.1
++ Revision: 507320
+- dont provide libpq = ver-rel on 32bits system (#57689)
+
+* Wed Feb 17 2010 Oden Eriksson <oeriksson@mandriva.com> 8.4.2-2mdv2010.1
++ Revision: 507077
+- attempt to fix #57689 (postgresql8.4-devel conflicts with itself)
+
+* Tue Dec 15 2009 Oden Eriksson <oeriksson@mandriva.com> 8.4.2-1mdv2010.1
++ Revision: 478953
+- 8.4.2
+
+* Mon Nov 23 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4.1-2mdv2010.1
++ Revision: 469190
+- redo define broke in last commit
+
+* Wed Sep 09 2009 Frederik Himpe <fhimpe@mandriva.org> 8.4.1-1mdv2010.0
++ Revision: 435899
+- update to new version 8.4.1
+- Fix typo in source URL
+
+* Wed Aug 26 2009 Götz Waschk <waschk@mandriva.org> 8.4.0-3mdv2010.0
++ Revision: 421514
+- rebuild for new perl
+
+* Wed Jul 29 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4.0-2mdv2010.0
++ Revision: 402899
+- add message about installation failure
+
+* Fri Jul 03 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4.0-1mdv2010.0
++ Revision: 391856
+- 8.4.0 finale
+
+* Sun Jun 28 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4-0.rc.rc2.1mdv2010.0
++ Revision: 390132
+- rc 2
+
+* Fri May 22 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4-0.rc.beta2.1mdv2010.0
++ Revision: 378727
+- beta2
+
+* Sat Apr 18 2009 Olivier Thauvin <nanardon@mandriva.org> 8.4-0.rc.beta1.1mdv2009.1
++ Revision: 367965
+- postgres 8.4 (beta)
+- 8.3.7
+- cleanup initscripts: don't setup tcp port anymore, should be set in postgresql.conf
+- by default /etc/syconfig/postgres is provided and force locales to C to allow multiple base encoding
+- update mandriva release note
+- 8.3.6
+- rebuild for python
+- patch1: fix printf fmt errors
+- 8.3.5
+- fix #44554 (typo in deps)
+- try to make urpmi working
+- avoid urpmi bugs with obsoletes
+- force reupload
+- replace obsoletes by conflicts
+- kill obsoletes
+- kill useless obsolete
+- 8.3.4
+- fix deps
+- -server don't obsolete postgresql but -server package (pointed by Anssi)
+- improve conflicts with other version
+- fix paths
+- kill test subpackage (not usefull)
+- kill db migration script
+- kill db migration script
+- move C headers files to standard location
+- fix /var location
+- fix spec to comply to new non standard rpm behavior
+- make localstatedir macro backportable
+- 8.3.3
+- fix typo in initscript
+- 8.3.1
+- move dict_snowball module from contrib to server, now required by main part
+- initdb is now log into /var/log/postgres instead... /dev/null
+- language provide pg-LANGUAGE
+- obsolete old language package (#35374)
+- merge all devel packages in pg-devel one (#27719)
+- 8.3 is default for mdv 2008.1
+- 8.3.0 final
+- 8.3.0 RC2
+- rebuild for perl 5.10
+- 8.3 RC1
+- fix dox path in help
+- 8.3 beta4
+- 8.3 beta 3
+- 8.3 beta2
+- kill bogus and useless data version check
+- enable xml and xslt features
+- kill old and useless now patch11
+- another deps fix
+- provide schema with the server
+- fix services setup in scriptlets
+- fix various dependencies
+- versionned lib* to avoid clash with older version when major are the same
+- postgresql 8.3 beta1
+- fork for 8.3
+- 8.2.5
+- rebuild
+- fix upgrade from 'postgresql'
+- add conflicts to ensure clean upgrade
+- provide empty package to pull latest
+- Create postgresql8.2
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild for new libreadline
+    - kill re-definition of %%buildroot on Pixel's request
+    - buildrequires X11-devel instead of XFree86-devel
+
+  + Adam Williamson <awilliamson@mandriva.org>
+    - rebuild for new tcl
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+    - normalize call to ldconfig in %%post/%%postun
+    - adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - bump release due to package loss
+
+  + Anssi Hannula <anssi@mandriva.org>
+    - rebuild for new soname of tcl
+
+  + David Walluck <walluck@mandriva.org>
+    - Provides: pq-devel = %%{version}-%%{release}
+

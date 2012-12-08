@@ -1,0 +1,173 @@
+#! /bin/sh
+# postgresql	This is the init script for starting up the PostgreSQL
+#		server
+#
+# chkconfig: 2345 85 15
+# description: Starts and stops the PostgreSQL backend daemon that handles \
+#	       all database requests.
+# processname: postmaster
+# pidfile: /var/lib/pgsql/data/postmaster.pid
+### BEGIN INIT INFO
+# Provides: postgresql
+# Required-Start: $local_fs $syslog
+# Required-Stop:
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 2 6
+# Short-Description: PostgreSql server database
+# Description: Starts and stops the PostgreSQL backend daemon that handles
+#              all database requests.
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Get config.
+. /etc/sysconfig/network
+
+# Find the name of the script
+NAME=postgresql
+
+# Set defaults for port and database directory
+PG_CTL=/usr/bin/pg_ctl
+POSTMASTER=/usr/bin/postmaster
+LOG_FILE=/var/log/postgres/${NAME}
+BASEBIN=$(basename ${POSTMASTER})
+LOCK_FILE=/var/lock/subsys/${BASEBIN}
+
+PGDATA=/var/lib/pgsql/data
+STOP_MODE="fast"
+
+[ -f /etc/sysconfig/postgresql ] && . /etc/sysconfig/postgresql
+[ -f ~postgres/.profile ] && . ~postgres/.profile
+
+# dependens on $PGDATA variable which might be overriden in sysconfig file
+PID_FILE=${PGDATA}/postmaster.pid
+
+# Override defaults from /etc/sysconfig/pgsql if file is present
+export LC_ALL
+export PGDATA
+export PGOPTIONS
+
+if [ ! -x "${POSTMASTER}" ]; then
+	[ "$1" = "stop" ] && exit 0
+	gprintf "%s needs to exist and be executable\n" "${POSTMASTER}"
+	exit 5
+fi
+
+RETVAL=0
+
+initdb() {
+	# Check for the PGDATA structure
+	if [ ! -f ${PGDATA}/PG_VERSION ]; then
+		gprintf "Initializing database: "
+		if [ ! -d ${PGDATA} ]; then
+			mkdir -p ${PGDATA}
+			chown postgres.postgres ${PGDATA}
+			chmod go-rwx ${PGDATA}
+		fi
+		# Initialize the database
+		daemon --user postgres "LC_ALL=${LC_ALL} /usr/bin/initdb --pgdata=${PGDATA} &>> /var/log/postgres/postgresql && test -f ${PGDATA}/PG_VERSION"
+		RETVAL=$?
+		echo
+ 	fi
+	return $RETVAL
+}
+
+start() {
+	initdb
+	gprintf "Starting %s service: " "${NAME}"
+	daemon --check ${POSTMASTER} --pidfile ${PID_FILE} --user postgres "${PG_CTL} start -l ${LOG_FILE} -D ${PGDATA} -p ${POSTMASTER} ${PGOPTIONS} > /dev/null"
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch ${LOCK_FILE}
+	return $RETVAL
+}
+
+stop(){
+	gprintf "Stopping %s service: " "${NAME}"
+	daemon --user postgres "${PG_CTL} stop -D ${PGDATA} -s -m ${STOP_MODE} > /dev/null"
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f ${LOCK_FILE}
+	return $RETVAL
+}
+
+restart(){
+	gprintf "Restarting %s service: " "${NAME}"
+	daemon --user postgres "${PG_CTL} restart -l ${LOG_FILE} -D ${PGDATA} -s -m ${STOP_MODE} ${PGOPTIONS} > /dev/null"
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch ${LOCK_FILE}
+	return $RETVAL
+}
+
+reload(){
+	gprintf "Reloading %s service: " "${NAME}"
+	daemon --user postgres "${PG_CTL} reload -D ${PGDATA} -s > /dev/null"
+	RETVAL=$?
+	echo
+	return $RETVAL
+}
+
+rh_status() {
+	status -p ${PID_FILE} ${POSTMASTER}
+        RETVAL=$?
+	return $RETVAL
+}
+
+rh_status_q() {
+	return $(rh_status >/dev/null 2>&1)
+}
+
+ACTION="$1"
+
+while [ "$#" -ne 0 ]; do
+	shift
+	case "$1" in
+	  smart|fast|immediate)
+		STOP_MODE="$1"
+		;;
+	esac
+done
+
+# See how we were called.
+case "$ACTION" in
+  start)
+	rh_status_q && exit 0
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	rh_status
+	;;
+  restart)
+	rh_status_q && restart || start
+	;;
+  reload|force-reload)
+	reload
+	;;
+  condrestart|try-restart)
+	rh_status_q || exit 0  
+	restart
+	;;
+  condstop)
+	rh_status_q || exit 0  
+	stop
+	;;
+  init)
+	init
+	;;
+  uninstall)
+	uninstall
+	;;
+  *)
+	gprintf "Usage: %s {start|status|restart|condrestart|condstop|reload|force-reload}\n" $0
+	gprintf "Stop:  %s {stop|restart|condrestart|condstop} [smart|fast|immediate]\n" $0
+	RETVAL=2
+	;;
+esac
+
+exit $RETVAL
+
