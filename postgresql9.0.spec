@@ -43,7 +43,7 @@ Version: 	%{current_major_version}%{?!beta:.%{current_minor_version}}
 Release: 	%release
 License:	BSD
 Group:		Databases
-URL:		http://www.postgresql.org/ 
+URL:		https://www.postgresql.org/ 
 Source0:	ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}%{?beta}.tar.bz2
 Source5:	ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}%{?beta}.tar.bz2.md5
 Source10:	postgres.profile
