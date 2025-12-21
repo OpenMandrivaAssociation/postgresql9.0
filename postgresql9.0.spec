@@ -53,6 +53,11 @@ Patch0:		postgresql-9.0.4_ossp-uuid-dir.patch
 Patch1:		 postgresql-9.0.8-soname_fix.diff
 Requires:	perl
 Provides:	postgresql-clients = %{version}-%{release}
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	bison flex
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
