@@ -27,7 +27,7 @@
 %define rel 0
 
 %define subrel 1
-%define release %mkrel %{?beta:0.rc.%{beta}.}%{rel}
+%define release %{?beta:0.rc.%{beta}.}%{rel}.1
 
 %define libname %mklibname pq%{current_major_version} _%{major}
 %define libecpg %mklibname ecpg%{current_major_version} _%{major_ecpg}
